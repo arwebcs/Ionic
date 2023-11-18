@@ -1,6 +1,6 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
-
-import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
+import { Location } from '@angular/common';
+import { Platform, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,43 +14,51 @@ export class AppComponent {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
 
-  //code for exit app
-  @ViewChildren(IonRouterOutlet) routerOutlets!: QueryList<IonRouterOutlet>;
   constructor(
     private platform: Platform,
-    private toastController: ToastController,
-    private router: Router
+    public alertController: AlertController,
+    private router: Router,
+    private _location: Location
   ) {
     // Initialize BackButton Eevent.
-    this.backButtonEvent();
-  }
+    //this.backButtonEvent();
 
-  // active hardware back button
-  backButtonEvent() {
-    this.platform.backButton.subscribe(async () => {
-      this.routerOutlets.forEach(async (outlet: IonRouterOutlet) => {
-        if (outlet && outlet.canGoBack()) {
-          outlet.pop();
-        } else if (this.router.url === '/home') {
-          if (
-            new Date().getTime() - this.lastTimeBackPress <
-            this.timePeriodToExit
-          ) {
-            const navigator: any = '';
-            // this.platform.exitApp(); // Exit from app
-            navigator['app'].exitApp(); // work in ionic 4
-          } else {
-            const toast = await this.toastController.create({
-              message: 'Press back again to exit App.',
-              duration: 2000,
-              position: 'middle',
-            });
-            toast.present();
-            // console.log(JSON.stringify(toast));
-            this.lastTimeBackPress = new Date().getTime();
-          }
-        }
-      });
+    this.platform.backButton.subscribeWithPriority(10, (processNextHandler) => {
+      // console.log('Back press handler!');
+      if (this._location.isCurrentPathEqualTo('/home')) {
+        // Show Exit Alert!
+        // console.log('Show Exit Alert!');
+        this.showExitConfirm();
+        processNextHandler();
+      } else {
+        // Navigate to back page
+        // console.log('Navigate to back page');
+        this._location.back();
+      }
     });
+  }
+  showExitConfirm() {
+    this.alertController
+      .create({
+        header: 'App termination',
+        message: 'Do you want to close the app?',
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: 'Stay',
+            role: 'cancel',
+          },
+          {
+            text: 'Logout',
+            handler: () => {
+              localStorage.clear();
+              this.router.navigate(['']);
+            },
+          },
+        ],
+      })
+      .then((alert) => {
+        alert.present();
+      });
   }
 }

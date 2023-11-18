@@ -15,7 +15,6 @@ export class TopComponent implements OnInit {
   ngOnInit() {}
 
   toggle(val: number) {
-    console.log(val);
     if (val === 0) {
       this.tog = 1;
       this.togg.emit(this.tog);

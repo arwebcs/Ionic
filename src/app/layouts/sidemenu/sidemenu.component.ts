@@ -11,15 +11,7 @@ export class SidemenuComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    if (this.toggle === 1) {
-      let addElem: any = document.getElementById('sidebar');
-      addElem.classList.add('collapsed');
-    } else {
-      let remElm: any = document.getElementById('sidebar');
-      remElm.classList.remove('collapsed');
-    }
-  }
+  ngOnInit() {}
 
   redirect(url: string) {
     this.router.navigate([url]).then(() => {
