@@ -1,0 +1,98 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Blank</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="wrapper">
+    <app-sidemenu [toggleVal]="toggle"></app-sidemenu>
+
+    <div class="main">
+      <app-top (togg)="getTog($event)"></app-top>
+
+      <main class="content">
+        <div class="container-fluid p-0">
+          <h1 class="h3 mb-3">Edit User</h1>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="editUser">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Name <span class="field_error"> *</span></label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter your name"
+                  formControlName="full_name"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                />
+                <div id="emailHelp" class="form-text field_error">
+                  {{ nameErr }}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Gender <span class="field_error"> *</span></label
+                >
+                <select
+                  formControlName="gender"
+                  tabindex="5"
+                  class="form-control"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                <div id="emailHelp" class="form-text field_error">
+                  {{ genderErr }}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  formControlName="email_id"
+                />
+                <div id="emailHelp" class="form-text field_error">
+                  {{ emailErr }}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Profile picture</label
+                >
+                <input
+                  type="file"
+                  tabindex="9"
+                  class="form-control"
+                  (change)="uploadFiles($event)"
+                />
+                <div id="emailHelp" class="form-text field_error">
+                  {{ profilepicErr }}
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" (click)="save()">
+                Submit
+              </button>
+              <span style="color: blue; font-weight: bold">
+                {{ message }}
+              </span>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <app-bottom></app-bottom>
+    </div>
+  </div>
+</ion-content>
